@@ -215,6 +215,38 @@
   </div>
 </div>
 
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" class="overlay">
+  <div class="modal" style="max-width:420px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>Complete Payment</strong>
+      <button id="closePayment" class="btn">✕</button>
+    </div>
+
+    <div style="margin-top:12px;font-size:14px;line-height:1.6">
+      <p><strong>Payment Method:</strong> Bank Transfer</p>
+      <p><strong>Bank:</strong> Kuda Bank</p>
+      <p><strong>Account Name:</strong> Victor Mmeri</p>
+      <p><strong>Account Number:</strong> 2040541530</p>
+
+      <div style="background:#f3f4f6;padding:10px;border-radius:10px;margin-top:10px">
+        <strong>Note:</strong> After payment, click confirm to send proof via WhatsApp.
+      </div>
+    </div>
+<div id="countdown" style="margin-top:10px;font-weight:bold;color:#dc2626;">
+  Time left: 10:00
+</div>
+    <div style="display:flex;gap:8px;margin-top:15px">
+      <button id="confirmPayment" class="btn product-buy" style="flex:1">
+        Confirm Payment
+      </button>
+      <button id="cancelPayment" class="btn" style="flex:1">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ========== Local product data (edit here to add/remove items) ==========
    Put product1.jpg .. product10.jpg in the same folder as this index.html.
@@ -458,11 +490,11 @@ document.addEventListener('click', (e)=>{
     showToast(`${name} added to cart`,'success');
   }
   if(e.target.classList.contains('product-buy')){
-    const name = e.target.dataset.name;
-    const email = (currentUser && currentUser.email) ? currentUser.email : 'guest@example.com';
-    const msg = encodeURIComponent(`Hello Nature Heals, I want to buy "${name}". My email: ${email}. How do I make payment?`);
-    window.open(`https://wa.me/15813419686?text=${msg}`, '_blank');
-  }
+  selectedProduct = e.target.dataset.name;
+  document.getElementById('paymentModal').style.display = 'flex';
+  startCountdown(); // ✅ ADD THIS
+}
+
   if(e.target.classList.contains('removeItem')){
     const idx = Number(e.target.dataset.idx);
     cart.splice(idx,1); saveCart(); renderCartItems();
@@ -480,6 +512,69 @@ document.getElementById('checkoutBtn').addEventListener('click', ()=> {
 /* Close overlays on outside click */
 document.querySelectorAll('.overlay').forEach(ov => ov.addEventListener('click', (e) => { if(e.target === ov) ov.style.display = 'none'; }));
 
+// Payment modal controls
+const paymentModal = document.getElementById('paymentModal');
+
+document.getElementById('closePayment').onclick = () => {
+  paymentModal.style.display = 'none';
+};
+
+document.getElementById('cancelPayment').onclick = () => {
+  paymentModal.style.display = 'none';
+};
+
+document.getElementById('confirmPayment').onclick = () => {
+  paymentModal.style.display = 'none';
+
+  const email = (currentUser && currentUser.email) ? currentUser.email : 'guest@example.com';
+
+  const msg = encodeURIComponent(
+    `Hello Nature Heals, I have made payment for "${selectedProduct}".\n\nBank: Kuda\nAccount Name: Victor Mmeri\nAccount Number: 2040541530\n\nMy email: ${email}`
+  );
+
+  window.open(`https://wa.me/15813419686?text=${msg}`, '_blank');
+};
+
+let countdownInterval;
+
+function startCountdown() {
+  let time = 600; // 10 minutes = 600 seconds
+
+  const countdownEl = document.getElementById('countdown');
+
+  clearInterval(countdownInterval);
+
+  countdownInterval = setInterval(() => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    countdownEl.textContent = `Time left: ${minutes}:${seconds}`;
+
+    time--;
+
+    if (time < 0) {
+      clearInterval(countdownInterval);
+      countdownEl.textContent = "Time expired!";
+    }
+  }, 1000);
+}
+
+function stopCountdown() {
+  clearInterval(countdownInterval);
+}
+
+document.getElementById('closePayment').onclick = () => {
+  paymentModal.style.display = 'none';
+  stopCountdown();
+};
+
+document.getElementById('cancelPayment').onclick = () => {
+  paymentModal.style.display = 'none';
+  stopCountdown();
+};
+
 /* Mobile audio autoplay helper */
 const bgAudio = document.getElementById('bgAudio');
 document.body.addEventListener('click', ()=> { if(bgAudio.paused) bgAudio.play().catch(()=>{}); });
@@ -488,6 +583,7 @@ document.body.addEventListener('click', ()=> { if(bgAudio.paused) bgAudio.play()
 window.showToast = showToast; window.showPopup = showPopup;
 
 })(); /* end local scope */
+
 </script>
 </body>
 </html>
