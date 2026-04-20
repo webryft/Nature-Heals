@@ -483,6 +483,24 @@ const COUNTRIES = [
 {code:'YE', name:'Yemen', flag:'🇾🇪'},
 {code:'ZM', name:'Zambia', flag:'🇿🇲'}, {code:'ZW', name:'Zimbabwe', flag:'🇿🇼'}
 ];
+
+function loadSavedCountry() {
+  const saved = localStorage.getItem('NH_COUNTRY_v1');
+
+  let country;
+
+  if (saved) {
+    country = JSON.parse(saved);
+  } else {
+    // DEFAULT → USA
+    country = COUNTRIES.find(c => c.code === 'US');
+    localStorage.setItem('NH_COUNTRY_v1', JSON.stringify(country));
+  }
+
+  // Update UI
+  document.getElementById('selectedFlag').textContent = country.flag;
+  document.getElementById('selectedCountry').textContent = country.name;
+  }
   
 function openCountryPicker(){
   document.getElementById('countryModal').style.display='flex';
@@ -610,6 +628,8 @@ document.body.addEventListener('click', ()=> { if(bgAudio.paused) bgAudio.play()
 window.showToast = showToast; window.showPopup = showPopup;
 
 })(); /* end local scope */
+  
+document.addEventListener('DOMContentLoaded', loadSavedCountry);
 
 </script>
 </body>
