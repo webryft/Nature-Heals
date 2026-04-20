@@ -457,12 +457,8 @@ document.getElementById('doChangePw').addEventListener('click', ()=> {
 });
 
 /* Country picker short list (expandable) */
-const COUNTRIES = [
-{code:'US', name:'United States', flag:'🇺🇸'},
-{code:'GB', name:'United Kingdom', flag:'🇬🇧'}, 
-{code:'CA', name:'Canada', flag:'🇨🇦'},
-{code:'IN', name:'India', flag:'🇮🇳'}, 
-{code:'FR', name:'France', flag:'🇫🇷'}
+const countries = [
+  {code:'US', name:'United States', flag:'🇺🇸'},
 {code:'AF', name:'Afghanistan', flag:'🇦🇫'},
 {code:'AL', name:'Albania', flag:'🇦🇱'},
 {code:'DZ', name:'Algeria', flag:'🇩🇿'},
@@ -642,7 +638,8 @@ const COUNTRIES = [
 {code:'YE', name:'Yemen', flag:'🇾🇪'},
 {code:'ZM', name:'Zambia', flag:'🇿🇲'},
 {code:'ZW', name:'Zimbabwe', flag:'🇿🇼'}
- ];
+];
+
   
 function openCountryPicker(){
   document.getElementById('countryModal').style.display='flex';
