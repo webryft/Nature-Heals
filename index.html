@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Paystack Inline -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
   :root{--bg:#f6fff6;--accent:#16a34a;--muted:#234e3a;--card:#ffffff}
   *{box-sizing:border-box}
@@ -49,10 +51,25 @@
   .priceRow{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .btn{padding:8px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:800}
   .product-buy{background:linear-gradient(90deg,#34d399,#10b981);color:white}
+  .payBtn{background:linear-gradient(90deg,#34d399,#10b981);color:white}
   .product-add{background:#fff;border:1px solid rgba(0,0,0,0.06)}
   .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:center;justify-content:center;padding:20px}
   .modal{background:white;border-radius:12px;padding:18px;max-width:420px;width:100%}
   @media (max-width:720px){ .hero{height:200px} .card img{height:220px} .searchWrap{max-width:200px} }
+
+  /* Payment method selector */
+  .payProduct{font-size:13px;color:#4a7c65;margin:10px 0 2px}
+  .payPrice{font-size:26px;font-weight:900;color:#16a34a;margin:0 0 14px}
+  .paymentMethodsGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .paymentMethodBtn{display:flex;align-items:center;gap:8px;padding:10px;border:2px solid rgba(0,0,0,0.08);border-radius:10px;background:#fff;cursor:pointer;font-weight:700;font-size:13px;color:#234e3a;text-align:left}
+  .paymentMethodBtn:hover{border-color:#86d8ab}
+  .paymentMethodBtn.selected{border-color:#16a34a;background:#ecfdf5;box-shadow:0 0 0 2px rgba(22,163,74,0.15)}
+  .payLogo{width:30px;height:30px;border-radius:8px;object-fit:contain;flex-shrink:0;background:#f3fff6}
+  .payLogoFallback{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff}
+  #proceedCheckout{width:100%;margin-top:16px;display:none}
+  #paymentStepConfirm{text-align:center;padding:6px 0}
+  #paymentStepConfirm .checkIcon{font-size:42px}
+  #confirmPayment{width:100%;margin-top:12px}
 </style>
 </head>
 <body>
@@ -219,34 +236,34 @@
 <div id="paymentModal" class="overlay">
   <div class="modal" style="max-width:420px">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong>Complete Payment on Chipper Cash and PayPal</strong>
+      <strong id="paymentModalTitle">Select Payment Method</strong>
       <button id="closePayment" class="btn">✕</button>
     </div>
 
-    <div style="margin-top:12px;font-size:14px;line-height:1.6">
-      <p><strong>Payment Method:</strong>  Bank Transfer</p>
-      <p><strong>Bank:</strong>  9 payment service</p>
-      <p><strong>Account Name:</strong>  Victor Mmeri</p>
-      <p><strong>Account Number:</strong>  6073011381</p>
-      <strong> __________________________</strong>
-      <strong>PayPal</strong>
-      <p><strong>PayPal Address:</strong>  igwevictorman@gmail.com</p>
+    <!-- STEP 1: choose a payment method, then checkout -->
+    <div id="paymentStepSelect">
+      <div class="payProduct" id="payProductName"></div>
+      <div class="payPrice" id="payProductPrice"></div>
 
-      <div style="background:#f3f4f6;padding:10px;border-radius:10px;margin-top:10px">
-        <strong>Note:</strong> After payment, click confirm to send proof via WhatsApp.
+      <div id="paymentMethodsGrid" class="paymentMethodsGrid"></div>
+
+      <button id="proceedCheckout" class="btn payBtn">Checkout</button>
+
+      <div id="countdown" style="margin-top:14px;font-weight:bold;color:#dc2626;text-align:center"></div>
+
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="cancelPayment" class="btn" style="flex:1">Cancel</button>
       </div>
     </div>
-<div id="countdown" style="margin-top:10px;font-weight:bold;color:#dc2626;">
-  Time left: 10:00
-</div>
-    <div style="display:flex;gap:8px;margin-top:15px">
-      <button id="confirmPayment" class="btn product-buy" style="flex:1">
-        Confirm Payment
-      </button>
-      <button id="cancelPayment" class="btn" style="flex:1">
-        Cancel
-      </button>
+
+    <!-- STEP 2: shown after Paystack confirms a successful charge -->
+    <div id="paymentStepConfirm" style="display:none">
+      <div class="checkIcon">✅</div>
+      <p style="font-weight:800;font-size:16px;color:#16a34a;margin:8px 0">Payment Successful!</p>
+      <p style="color:#234e3a;font-size:14px;margin:0">Tap below to send your payment confirmation to us on WhatsApp so we can deliver your eBook right away.</p>
+      <button id="confirmPayment" class="btn payBtn">Confirm Payment</button>
     </div>
+
   </div>
 </div>
 
@@ -254,33 +271,37 @@
 /* ========== Local product data (edit here to add/remove items) ==========
    Put product1.jpg .. product10.jpg in the same folder as this index.html.
    Each product: { id, name, price, imageURL }
+   - price is in NAIRA (₦), NOT dollars. Replace every value below with the
+     real ₦ amount you want to charge — these numbers (0.9, 1, 2, 3.8 ...)
+     are old USD placeholders and are FAR BELOW what Paystack will accept,
+     so checkout will fail until you update them (e.g. 900, 1500, 3800).
    - Add more items by copying a line and incrementing image filename (product11.jpg, etc.)
 =============================================================== */
 const PRODUCTS = [
-  { id: 'p1', name: 'Healing for kidney eBook', price: 0.9, imageURL: 'product1.jpg' },
-  { id: 'p2', name: 'Healing for Ulcers eBook', price: 1, imageURL: 'product2.jpg' },
-  { id: 'p3', name: 'Healing for Infertility eBook', price: 1, imageURL: 'product3.jpg' },
-  { id: 'p4', name: 'Healing for HIV eBook', price: 3.8, imageURL: 'product4.jpg' },
-  { id: 'p5', name: 'Healing for Hepatitis eBook', price: 2, imageURL: 'product5.jpg' },
-  { id: 'p6', name: 'Healing for Heart Attack eBook', price: 2, imageURL: 'product6.jpg' },
-  { id: 'p7', name: 'ED & low sperm count eBook', price: 2, imageURL: 'product7.jpg' },
-  { id: 'p8', name: 'Healing for diabetes eBook', price: 0.6, imageURL: 'product8.jpg' },
-  { id: 'p9', name: 'Healing for Chest & Lungs eBook', price: 1, imageURL: 'product9.jpg' },
-  { id: 'p10', name: 'Healing for Stroke Attack eBook', price: 2, imageURL: 'product10.jpg' },
-  { id: 'p11', name: 'Slow Aging Live Long eBook', price: 2, imageURL: 'product11.jpg' },
-  { id: 'p0', name: 'Healing for Eyes eBook', price: 2, imageURL: 'product0.jpg' },
-  { id: 'p', name: 'High blood pressure eBook', price: 0.4, imageURL: 'product.jpg' },
-  { id: 'p12', name: 'Healing for Infection eBook', price: 3, imageURL: 'product12.jpg' },
-  { id: 'p13', name: 'Healing for gonorrhea eBook', price: 3, imageURL: 'product13.jpg' },
-  { id: 'p14', name: 'Healing for Fibroids eBook', price: 2, imageURL: 'product14.jpg' },
-  { id: 'p15', name: 'Healing for pains eBook', price: 1, imageURL: 'product15.jpg' },
-  { id: 'p16', name: 'Healing for piles eBook', price: 2, imageURL: 'product16.jpg' },
-  { id: 'p17', name: 'Healing for Cancers eBook', price: 4, imageURL: 'product17.jpg' },
-  { id: 'p18', name: 'Healing for HPV eBook', price: 3, imageURL: 'product18.jpg' },
-  { id: 'p19', name: 'Healing for Herpes eBook', price: 3, imageURL: 'product19.jpg' },
-  { id: 'p20', name: 'Blood Cells eBook', price: 0.0, imageURL: 'product20.jpg' },
-  { id: 'p21', name: 'AIDS/HIV/CD4  T-cells eBook', price: 10, imageURL: 'product21.jpg' },
-  { id: 'p4', name: 'Healing for HIV eBook', price: 3.8, imageURL: 'product4.jpg' },
+  { id: 'p1', name: 'Healing for kidney eBook', price: 2000, imageURL: 'product1.jpg' },
+  { id: 'p2', name: 'Healing for Ulcers eBook', price: 2000, imageURL: 'product2.jpg' },
+  { id: 'p3', name: 'Healing for Infertility eBook', price: 3000, imageURL: 'product3.jpg' },
+  { id: 'p4', name: 'Healing for HIV eBook', price: 10000, imageURL: 'product4.jpg' },
+  { id: 'p5', name: 'Healing for Hepatitis eBook', price: 5000, imageURL: 'product5.jpg' },
+  { id: 'p6', name: 'Healing for Heart Attack eBook', price: 4000, imageURL: 'product6.jpg' },
+  { id: 'p7', name: 'ED & low sperm count eBook', price: 3000, imageURL: 'product7.jpg' },
+  { id: 'p8', name: 'Healing for diabetes eBook', price: 2000, imageURL: 'product8.jpg' },
+  { id: 'p9', name: 'Healing for Chest & Lungs eBook', price: 2000, imageURL: 'product9.jpg' },
+  { id: 'p10', name: 'Healing for Stroke Attack eBook', price: 2000, imageURL: 'product10.jpg' },
+  { id: 'p11', name: 'Slow Aging Live Long eBook', price: 4500, imageURL: 'product11.jpg' },
+  { id: 'p0', name: 'Healing for Eyes eBook', price: 4000, imageURL: 'product0.jpg' },
+  { id: 'p', name: 'High blood pressure eBook', price: 4000, imageURL: 'product.jpg' },
+  { id: 'p12', name: 'Healing for Infection eBook', price: 7000, imageURL: 'product12.jpg' },
+  { id: 'p13', name: 'Healing for gonorrhea eBook', price: 6000, imageURL: 'product13.jpg' },
+  { id: 'p14', name: 'Healing for Fibroids eBook', price: 5000, imageURL: 'product14.jpg' },
+  { id: 'p15', name: 'Healing for pains eBook', price: 4000, imageURL: 'product15.jpg' },
+  { id: 'p16', name: 'Healing for piles eBook', price: 3000, imageURL: 'product16.jpg' },
+  { id: 'p17', name: 'Healing for Cancers eBook', price: 10000, imageURL: 'product17.jpg' },
+  { id: 'p18', name: 'Healing for HPV eBook', price: 7300, imageURL: 'product18.jpg' },
+  { id: 'p19', name: 'Healing for Herpes eBook', price: 7400, imageURL: 'product19.jpg' },
+  { id: 'p20', name: 'Blood Cells eBook', price: 10000, imageURL: 'product20.jpg' },
+  { id: 'p21', name: 'AIDS/HIV/CD4  T-cells eBook', price: 20000, imageURL: 'product21.jpg' },
+  { id: 'p4', name: 'Healing for HIV eBook', price: 10000, imageURL: 'product4.jpg' },
 ];
 /* ============================================================= */
 
@@ -301,6 +322,9 @@ const LS_USER = 'NH_USER_v1';
 const LS_CART = 'NH_CART_v1';
 let currentUser = JSON.parse(localStorage.getItem(LS_USER) || 'null');
 let cart = JSON.parse(localStorage.getItem(LS_CART) || '[]');
+let selectedProduct = null;
+let selectedPrice = 0;
+let selectedMethod = null;
 
 function saveUser(){ localStorage.setItem(LS_USER, JSON.stringify(currentUser)); }
 function saveCart(){ localStorage.setItem(LS_CART, JSON.stringify(cart)); updateCartUI(); }
@@ -326,10 +350,10 @@ function renderProducts(items){
       <img src="${escapeHtml(p.imageURL)}" alt="${escapeHtml(p.name)}">
       <h3>${escapeHtml(p.name)}</h3>
       <div class="priceRow">
-        <div style="font-weight:800">$${Number(p.price).toFixed(2)}</div>
+        <div style="font-weight:800">₦${Number(p.price).toLocaleString()}</div>
         <div style="display:flex;gap:8px">
           <button class="btn product-add" data-name="${escapeHtml(p.name)}" data-price="${p.price}">Add to Cart</button>
-          <button class="btn product-buy" data-name="${escapeHtml(p.name)}">Buy Now</button>
+          <button class="btn product-buy" data-name="${escapeHtml(p.name)}" data-price="${p.price}">Buy Now</button>
         </div>
       </div>`;
     productGrid.appendChild(el);
@@ -522,7 +546,7 @@ function renderCartItems(){
   cart.forEach((item, idx) => {
     const row = document.createElement('div');
     row.style.display='flex'; row.style.alignItems='center'; row.style.gap='8px'; row.style.padding='8px 0'; row.style.borderBottom='1px solid rgba(0,0,0,0.04)';
-    row.innerHTML = `<div style="flex:1"><div style="font-weight:800">${item.name}</div><div style="color:#666">$${Number(item.price).toFixed(2)}</div></div><button data-idx="${idx}" class="btn removeItem" style="background:#ef4444;color:#fff">Remove</button>`;
+    row.innerHTML = `<div style="flex:1"><div style="font-weight:800">${item.name}</div><div style="color:#666">₦${Number(item.price).toLocaleString()}</div></div><button data-idx="${idx}" class="btn removeItem" style="background:#ef4444;color:#fff">Remove</button>`;
     container.appendChild(row);
   });
 }
@@ -535,10 +559,10 @@ document.addEventListener('click', (e)=>{
     showToast(`${name} added to cart`,'success');
   }
   if(e.target.classList.contains('product-buy')){
-  selectedProduct = e.target.dataset.name;
-  document.getElementById('paymentModal').style.display = 'flex';
-  startCountdown();
-}
+    selectedProduct = e.target.dataset.name;
+    selectedPrice = Number(e.target.dataset.price || 0);
+    openPaymentModal();
+  }
 
   if(e.target.classList.contains('removeItem')){
     const idx = Number(e.target.dataset.idx);
@@ -557,48 +581,125 @@ document.getElementById('checkoutBtn').addEventListener('click', ()=> {
 /* Close overlays on outside click */
 document.querySelectorAll('.overlay').forEach(ov => ov.addEventListener('click', (e) => { if(e.target === ov) ov.style.display = 'none'; }));
 
-// Payment modal controls
-const paymentModal = document.getElementById('paymentModal');
+// ====================== PAYMENT (Paystack) ======================
+const PAYSTACK_PUBLIC_KEY = 'pk_live_4ff37d15381d1d12c78fd66f7bc86beb64c59415';
+const WHATSAPP_NUMBER = '17404061406';
+
+/* Each method maps to the Paystack channel(s) it should restrict the
+   checkout to. Opay / MoniePoint / Africa Transfer / 9PSB don't have their
+   own Paystack channel code — Paystack issues one dynamic account number
+   under "bank_transfer" that accepts a transfer from ANY bank or wallet
+   app, including these, so they all route there. Card uses the card channel. */
+const PAYMENT_METHODS = [
+  { id:'opay', name:'Opay', logo:'opay-logo.png', color:'#1ba8e0', channels:['bank_transfer'] },
+  { id:'moniepoint', name:'MoniePoint', logo:'moniepoint-logo.png', color:'#1455dc', channels:['bank_transfer'] },
+  { id:'africa_transfer', name:'Africa Transfer', logo:'africa-transfer-logo.png', color:'#16a34a', channels:['bank_transfer'] },
+  { id:'9psb', name:'9 Payment Service', logo:'9psb-logo.png', color:'#7c3aed', channels:['bank_transfer'] },
+  { id:'card', name:'Card Payment', logo:'card-logo.png', color:'#ea580c', channels:['card'] }
+];
+
+const paymentModalEl = document.getElementById('paymentModal');
+
+function openPaymentModal(){
+  selectedMethod = null;
+  document.getElementById('paymentModalTitle').textContent = 'Select Payment Method';
+  document.getElementById('paymentStepSelect').style.display = 'block';
+  document.getElementById('paymentStepConfirm').style.display = 'none';
+  document.getElementById('payProductName').textContent = selectedProduct;
+  document.getElementById('payProductPrice').textContent = '₦' + Number(selectedPrice).toLocaleString();
+  document.getElementById('proceedCheckout').style.display = 'none';
+  renderPaymentMethods();
+  paymentModalEl.style.display = 'flex';
+  startCountdown();
+}
+
+function renderPaymentMethods(){
+  const grid = document.getElementById('paymentMethodsGrid');
+  grid.innerHTML = '';
+  PAYMENT_METHODS.forEach(m=>{
+    const initials = m.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'paymentMethodBtn';
+    btn.dataset.id = m.id;
+    btn.innerHTML = `<img class="payLogo" src="${m.logo}" alt="${escapeHtml(m.name)}" onerror="this.outerHTML='<div class=&quot;payLogoFallback&quot; style=&quot;background:${m.color}&quot;>${initials}</div>'"><span>${escapeHtml(m.name)}</span>`;
+    btn.addEventListener('click', ()=>{
+      selectedMethod = m;
+      document.querySelectorAll('.paymentMethodBtn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('proceedCheckout').style.display = 'block';
+    });
+    grid.appendChild(btn);
+  });
+}
+
+document.getElementById('proceedCheckout').addEventListener('click', ()=>{
+  if(!selectedMethod){ showPopup('Choose a method','Please select a payment method first.','warning'); return; }
+  if(typeof PaystackPop === 'undefined'){
+    showPopup('Payment unavailable','The payment service failed to load. Check your internet connection and try again.','error');
+    return;
+  }
+  const email = (currentUser && currentUser.email) ? currentUser.email : 'guest@natureheals.com';
+  const handler = PaystackPop.setup({
+    key: PAYSTACK_PUBLIC_KEY,
+    email: email,
+    amount: Math.round(Number(selectedPrice) * 100), // kobo
+    currency: 'NGN',
+    channels: selectedMethod.channels,
+    ref: 'NH_' + Date.now(),
+    metadata: { product: selectedProduct, method: selectedMethod.name },
+    callback: function(response){
+      showPaymentSuccess(response.reference);
+    },
+    onClose: function(){
+      // user closed the Paystack popup without paying — stay on step 1
+    }
+  });
+  handler.openIframe();
+});
+
+function showPaymentSuccess(reference){
+  stopCountdown();
+  document.getElementById('paymentModalTitle').textContent = 'Payment Complete';
+  document.getElementById('paymentStepSelect').style.display = 'none';
+  document.getElementById('paymentStepConfirm').style.display = 'block';
+  paymentModalEl.dataset.lastRef = reference || '';
+}
+
+document.getElementById('confirmPayment').addEventListener('click', ()=>{
+  const email = (currentUser && currentUser.email) ? currentUser.email : 'guest@example.com';
+  const reference = paymentModalEl.dataset.lastRef || '';
+  const methodName = selectedMethod ? selectedMethod.name : 'Paystack';
+  const msg = encodeURIComponent(
+    `Hello Nature Heals, I have made payment for "${selectedProduct}" (₦${Number(selectedPrice).toLocaleString()}) via ${methodName}.\n\nPaystack reference: ${reference}\nMy email: ${email}`
+  );
+  paymentModalEl.style.display = 'none';
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+});
 
 document.getElementById('closePayment').onclick = () => {
-  paymentModal.style.display = 'none';
+  paymentModalEl.style.display = 'none';
+  stopCountdown();
 };
 
 document.getElementById('cancelPayment').onclick = () => {
-  paymentModal.style.display = 'none';
-};
-
-document.getElementById('confirmPayment').onclick = () => {
-  paymentModal.style.display = 'none';
-
-  const email = (currentUser && currentUser.email) ? currentUser.email : 'guest@example.com';
-
-  const msg = encodeURIComponent(
-    `Hello Nature Heals, I have made payment for "${selectedProduct}".\n\nBank: 9 payment service\nAccount Name: Victor Mmeri\nAccount Number: 6073011381\n\nMy email: ${email}`
-  );
-
-  window.open(`https://wa.me/17404061406?text=${msg}`, '_blank');
+  paymentModalEl.style.display = 'none';
+  stopCountdown();
 };
 
 let countdownInterval;
 
 function startCountdown() {
   let time = 600; // 10 minutes = 600 seconds
-
   const countdownEl = document.getElementById('countdown');
-
   clearInterval(countdownInterval);
-
+  countdownEl.textContent = 'Time left: 10:00';
   countdownInterval = setInterval(() => {
     let minutes = Math.floor(time / 60);
     let seconds = time % 60;
-
     seconds = seconds < 10 ? '0' + seconds : seconds;
-
     countdownEl.textContent = `Time left: ${minutes}:${seconds}`;
-
     time--;
-
     if (time < 0) {
       clearInterval(countdownInterval);
       countdownEl.textContent = "Time expired!";
@@ -609,16 +710,7 @@ function startCountdown() {
 function stopCountdown() {
   clearInterval(countdownInterval);
 }
-
-document.getElementById('closePayment').onclick = () => {
-  paymentModal.style.display = 'none';
-  stopCountdown();
-};
-
-document.getElementById('cancelPayment').onclick = () => {
-  paymentModal.style.display = 'none';
-  stopCountdown();
-};
+// ====================== END PAYMENT ======================
 
 /* Mobile audio autoplay helper */
 const bgAudio = document.getElementById('bgAudio');
