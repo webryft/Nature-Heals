@@ -591,11 +591,12 @@ const WHATSAPP_NUMBER = '17404061406';
    under "bank_transfer" that accepts a transfer from ANY bank or wallet
    app, including these, so they all route there. Card uses the card channel. */
 const PAYMENT_METHODS = [
-  { id:'opay', name:'Opay', logo:'opay-logo.png', color:'#1ba8e0', channels:['bank_transfer'] },
-  { id:'moniepoint', name:'MoniePoint', logo:'moniepoint-logo.png', color:'#1455dc', channels:['bank_transfer'] },
-  { id:'africa_transfer', name:'Africa Transfer', logo:'africa-transfer-logo.png', color:'#16a34a', channels:['bank_transfer'] },
-  { id:'9psb', name:'9 Payment Service', logo:'9psb-logo.png', color:'#7c3aed', channels:['bank_transfer'] },
-  { id:'card', name:'Card Payment', logo:'card-logo.png', color:'#ea580c', channels:['card'] }
+  { id:'opay', name:'Opay', logo:'opay.png', color:'#1ba8e0', channels:['bank_transfer'] },
+  { id:'moniepoint', name:'MoniePoint', logo:'moniepoint.png', color:'#1455dc', channels:['bank_transfer'] },
+  { id:'africa_transfer', name:'Africa Transfer', logo:'africatransfer.png', color:'#16a34a', channels:['bank_transfer'] },
+  { id:'9psb', name:'9 Payment Service', logo:'9psb.png', color:'#7c3aed', channels:['bank_transfer'] },
+  { id:'card', name:'Card Payment', logo:'card.png', color:'#ea580c', channels:['card'] } ,
+    { id:'Kuda', name:'kuda MFB', logo:'kuda.png', color:'#ea580c', channels:['bank_transfer'] } 
 ];
 
 const paymentModalEl = document.getElementById('paymentModal');
