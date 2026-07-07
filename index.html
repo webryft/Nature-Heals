@@ -101,6 +101,12 @@
   </div>
 </div>
 
+<div style="max-width:1300px;margin:0 auto;padding:0 18px">
+  <div style="background:#ecfdf5;border:1px solid #bbf0d3;border-radius:12px;padding:12px 16px;font-size:13px;color:#234e3a;line-height:1.5">
+    <strong>Please note:</strong> These guides are educational and focus on prevention and healthy lifestyle habits. They are not medical treatment and don't replace a doctor's diagnosis or care.
+  </div>
+</div>
+
 <div id="productGrid" class="grid"></div>
 
 <audio id="bgAudio" autoplay loop>
@@ -278,30 +284,29 @@
    - Add more items by copying a line and incrementing image filename (product11.jpg, etc.)
 =============================================================== */
 const PRODUCTS = [
-  { id: 'p1', name: 'Healing for kidney eBook', price: 2000, imageURL: 'product1.jpg' },
-  { id: 'p2', name: 'Healing for Ulcers eBook', price: 2000, imageURL: 'product2.jpg' },
-  { id: 'p3', name: 'Healing for Infertility eBook', price: 3000, imageURL: 'product3.jpg' },
-  { id: 'p4', name: 'Healing for HIV eBook', price: 10000, imageURL: 'product4.jpg' },
-  { id: 'p5', name: 'Healing for Hepatitis eBook', price: 5000, imageURL: 'product5.jpg' },
-  { id: 'p6', name: 'Healing for Heart Attack eBook', price: 4000, imageURL: 'product6.jpg' },
-  { id: 'p7', name: 'ED & low sperm count eBook', price: 3000, imageURL: 'product7.jpg' },
-  { id: 'p8', name: 'Healing for diabetes eBook', price: 2000, imageURL: 'product8.jpg' },
-  { id: 'p9', name: 'Healing for Chest & Lungs eBook', price: 2000, imageURL: 'product9.jpg' },
-  { id: 'p10', name: 'Healing for Stroke Attack eBook', price: 2000, imageURL: 'product10.jpg' },
-  { id: 'p11', name: 'Slow Aging Live Long eBook', price: 4500, imageURL: 'product11.jpg' },
-  { id: 'p0', name: 'Healing for Eyes eBook', price: 4000, imageURL: 'product0.jpg' },
-  { id: 'p', name: 'High blood pressure eBook', price: 4000, imageURL: 'product.jpg' },
-  { id: 'p12', name: 'Healing for Infection eBook', price: 7000, imageURL: 'product12.jpg' },
-  { id: 'p13', name: 'Healing for gonorrhea eBook', price: 6000, imageURL: 'product13.jpg' },
-  { id: 'p14', name: 'Healing for Fibroids eBook', price: 5000, imageURL: 'product14.jpg' },
-  { id: 'p15', name: 'Healing for pains eBook', price: 4000, imageURL: 'product15.jpg' },
-  { id: 'p16', name: 'Healing for piles eBook', price: 3000, imageURL: 'product16.jpg' },
-  { id: 'p17', name: 'Healing for Cancers eBook', price: 10000, imageURL: 'product17.jpg' },
-  { id: 'p18', name: 'Healing for HPV eBook', price: 7300, imageURL: 'product18.jpg' },
-  { id: 'p19', name: 'Healing for Herpes eBook', price: 7400, imageURL: 'product19.jpg' },
-  { id: 'p20', name: 'Blood Cells eBook', price: 10000, imageURL: 'product20.jpg' },
-  { id: 'p21', name: 'AIDS/HIV/CD4  T-cells eBook', price: 20000, imageURL: 'product21.jpg' },
-  { id: 'p4', name: 'Healing for HIV eBook', price: 10000, imageURL: 'product4.jpg' },
+  { id: 'p1', name: 'Kidney Health: A Prevention Guide', price: 2000, imageURL: 'product1.jpg' },
+  { id: 'p2', name: 'Preventing Stomach Ulcers: Diet & Lifestyle', price: 2000, imageURL: 'product2.jpg' },
+  { id: 'p3', name: 'Fertility & Reproductive Health: A Lifestyle Guide', price: 3000, imageURL: 'product3.jpg' },
+  { id: 'p4', name: 'HIV Prevention & Healthy Living Guide', price: 10000, imageURL: 'product4.jpg' },
+  { id: 'p5', name: 'Liver Health: Hepatitis Prevention Guide', price: 5000, imageURL: 'product5.jpg' },
+  { id: 'p6', name: 'Heart Health: Prevention-Focused Habits', price: 4000, imageURL: 'product6.jpg' },
+  { id: 'p7', name: "Men's Reproductive Health: A Lifestyle Guide", price: 3000, imageURL: 'product7.jpg' },
+  { id: 'p8', name: 'Preventing Type 2 Diabetes: A Lifestyle Guide', price: 2000, imageURL: 'product8.jpg' },
+  { id: 'p9', name: 'Lung & Respiratory Health: A Prevention Guide', price: 2000, imageURL: 'product9.jpg' },
+  { id: 'p10', name: 'Stroke Prevention: Lifestyle Guide', price: 2000, imageURL: 'product10.jpg' },
+  { id: 'p11', name: 'Healthy Aging: Habits for a Longer Life', price: 4500, imageURL: 'product11.jpg' },
+  { id: 'p0', name: 'Eye Health: A Prevention Guide', price: 4000, imageURL: 'product0.jpg' },
+  { id: 'p', name: 'Preventing High Blood Pressure: A Lifestyle Guide', price: 4000, imageURL: 'product.jpg' },
+  { id: 'p12', name: 'Immune Health: Preventing Common Infections', price: 7000, imageURL: 'product12.jpg' },
+  { id: 'p13', name: 'Sexual Health: Prevention & Awareness Guide', price: 6000, imageURL: 'product13.jpg' },
+  { id: 'p14', name: "Women's Health: Understanding & Reducing Fibroid Risk", price: 5000, imageURL: 'product14.jpg' },
+  { id: 'p15', name: 'Managing Everyday Pain: A Lifestyle Guide', price: 4000, imageURL: 'product15.jpg' },
+  { id: 'p16', name: 'Digestive Health: Preventing Hemorrhoids', price: 3000, imageURL: 'product16.jpg' },
+  { id: 'p17', name: 'Cancer Risk Reduction: Diet & Lifestyle Habits', price: 10000, imageURL: 'product17.jpg' },
+  { id: 'p18', name: 'HPV Awareness & Prevention Guide', price: 7300, imageURL: 'product18.jpg' },
+  { id: 'p19', name: 'Sexual Health: Herpes Prevention & Awareness', price: 7400, imageURL: 'product19.jpg' },
+  { id: 'p20', name: 'Blood Health: A Nutrition & Wellness Guide', price: 10000, imageURL: 'product20.jpg' },
+  { id: 'p21', name: 'Understanding HIV & Immune Health: An Awareness Guide', price: 20000, imageURL: 'product21.jpg' },
 ];
 /* ============================================================= */
 
@@ -336,6 +341,120 @@ updateCartUI();
 /* safe escape for attributes */
 function escapeHtml(s){ return String(s).replace(/"/g,'&quot;'); }
 
+/* ===================== CURRENCY / LIVE EXCHANGE RATE ===================== *
+   Source price for every product is NGN (Naira). When the user picks a
+   country, we look up that country's currency, fetch a live NGN-based
+   exchange rate, and re-render prices converted into that currency.
+   The Paystack charge itself always stays in NGN (see PAYMENT section) —
+   the converted price shown here is for the shopper's information only,
+   so it's clear what they're paying in their own currency.
+   NOTE: this block must run BEFORE renderProducts() is first called below,
+   so it lives here rather than near the COUNTRIES list further down. */
+
+const CURRENCY_MAP = {
+  AF:'AFN', AL:'ALL', DZ:'DZD', AD:'EUR', AO:'AOA', AR:'ARS', AM:'AMD', AU:'AUD', AT:'EUR', AZ:'AZN',
+  BS:'BSD', BH:'BHD', BD:'BDT', BB:'BBD', BY:'BYN', BE:'EUR', BZ:'BZD', BJ:'XOF', BT:'BTN', BO:'BOB',
+  BA:'BAM', BW:'BWP', BR:'BRL', BN:'BND', BG:'BGN', BF:'XOF', BI:'BIF',
+  KH:'KHR', CM:'XAF', CA:'CAD', CV:'CVE', CF:'XAF', TD:'XAF', CL:'CLP', CN:'CNY', CO:'COP', KM:'KMF', CG:'XAF', CR:'CRC', HR:'EUR', CU:'CUP', CY:'EUR', CZ:'CZK',
+  DK:'DKK', DJ:'DJF', DO:'DOP',
+  EC:'USD', EG:'EGP', SV:'USD', GQ:'XAF', ER:'ERN', EE:'EUR', ET:'ETB',
+  FJ:'FJD', FI:'EUR', FR:'EUR',
+  GA:'XAF', GM:'GMD', GE:'GEL', DE:'EUR', GH:'GHS', GR:'EUR', GD:'XCD', GT:'GTQ', GN:'GNF', GW:'XOF', GY:'GYD',
+  HT:'HTG', HN:'HNL', HU:'HUF',
+  IS:'ISK', IN:'INR', ID:'IDR', IR:'IRR', IQ:'IQD', IE:'EUR', IL:'ILS', IT:'EUR',
+  JM:'JMD', JP:'JPY', JO:'JOD',
+  KZ:'KZT', KE:'KES', KI:'AUD', KW:'KWD', KG:'KGS',
+  LA:'LAK', LV:'EUR', LB:'LBP', LS:'LSL', LR:'LRD', LY:'LYD', LI:'CHF', LT:'EUR', LU:'EUR',
+  MG:'MGA', MW:'MWK', MY:'MYR', MV:'MVR', ML:'XOF', MT:'EUR', MH:'USD', MR:'MRU', MU:'MUR', MX:'MXN', MD:'MDL', MC:'EUR', MN:'MNT', ME:'EUR', MA:'MAD', MZ:'MZN', MM:'MMK',
+  NA:'NAD', NR:'AUD', NP:'NPR', NL:'EUR', NZ:'NZD', NI:'NIO', NE:'XOF', NG:'NGN', KP:'KPW', NO:'NOK',
+  OM:'OMR',
+  PK:'PKR', PW:'USD', PA:'PAB', PG:'PGK', PY:'PYG', PE:'PEN', PH:'PHP', PL:'PLN', PT:'EUR',
+  QA:'QAR',
+  RO:'RON', RU:'RUB', RW:'RWF',
+  SA:'SAR', SN:'XOF', RS:'RSD', SC:'SCR', SL:'SLE', SG:'SGD', SK:'EUR', SI:'EUR', SB:'SBD', SO:'SOS', ZA:'ZAR', KR:'KRW', ES:'EUR', LK:'LKR', SD:'SDG', SR:'SRD', SE:'SEK', CH:'CHF', SY:'SYP',
+  TW:'TWD', TJ:'TJS', TZ:'TZS', TH:'THB', TG:'XOF', TO:'TOP', TT:'TTD', TN:'TND', TR:'TRY', TM:'TMT',
+  UG:'UGX', UA:'UAH', AE:'AED', GB:'GBP', US:'USD', UY:'UYU', UZ:'UZS',
+  VU:'VUV', VA:'EUR', VE:'VES', VN:'VND',
+  YE:'YER',
+  ZM:'ZMW', ZW:'ZWL'
+};
+
+const CURRENCY_SYMBOLS = {
+  NGN:'₦', USD:'$', GBP:'£', EUR:'€', CAD:'$', AUD:'$', GHS:'GH₵', ZAR:'R', KES:'KSh',
+  INR:'₹', JPY:'¥', CNY:'¥', BRL:'R$', MXN:'$', SGD:'S$', AED:'د.إ', SAR:'﷼', EGP:'E£',
+  KRW:'₩', PHP:'₱', PKR:'₨', BDT:'৳', TRY:'₺', CHF:'CHF ', SEK:'kr', NOK:'kr', DKK:'kr'
+};
+
+const FX_CACHE_KEY = 'NH_FX_RATES_v1';
+const FX_MAX_AGE_MS = 60 * 60 * 1000; // refresh hourly
+
+let fxRates = null;        // { USD: 0.00065, GBP: 0.00051, ... } — 1 NGN in each currency
+let fxUpdatedAt = null;
+
+function currencySymbol(code){
+  return CURRENCY_SYMBOLS[code] || (code + ' ');
+}
+
+/* Reads the saved country's code directly from localStorage — does NOT
+   depend on the COUNTRIES list (which is defined further down the file)
+   so this is safe to call as soon as the page loads. */
+function getCurrentCurrency(){
+  const saved = localStorage.getItem('NH_COUNTRY_v1');
+  const code = saved ? (JSON.parse(saved).code || 'US') : 'US';
+  return CURRENCY_MAP[code] || 'USD';
+}
+
+async function fetchFxRates(force){
+  const cached = JSON.parse(localStorage.getItem(FX_CACHE_KEY) || 'null');
+  if(!force && cached && (Date.now() - cached.ts) < FX_MAX_AGE_MS){
+    fxRates = cached.rates;
+    fxUpdatedAt = new Date(cached.ts);
+    return fxRates;
+  }
+  try{
+    const res = await fetch('https://open.er-api.com/v6/latest/NGN');
+    const data = await res.json();
+    if(data && data.rates){
+      fxRates = data.rates;
+      fxUpdatedAt = new Date();
+      localStorage.setItem(FX_CACHE_KEY, JSON.stringify({ rates: fxRates, ts: fxUpdatedAt.getTime() }));
+    }
+  }catch(err){
+    // Offline or the FX API is unreachable — fall back to cached rates if we have them,
+    // otherwise prices simply display in NGN until the next successful fetch.
+    if(cached){ fxRates = cached.rates; fxUpdatedAt = new Date(cached.ts); }
+    console.warn('Live exchange rate fetch failed, using fallback:', err);
+  }
+  return fxRates;
+}
+
+/* Convert an NGN amount into the currently selected currency. Returns the
+   NGN amount unchanged if we don't have a rate for that currency yet. */
+function convertFromNGN(ngnAmount){
+  const currency = getCurrentCurrency();
+  if(currency === 'NGN' || !fxRates || !fxRates[currency]){
+    return { amount: ngnAmount, currency: 'NGN' };
+  }
+  return { amount: ngnAmount * fxRates[currency], currency };
+}
+
+function formatConvertedPrice(ngnAmount){
+  const { amount, currency } = convertFromNGN(ngnAmount);
+  const symbol = currencySymbol(currency);
+  const decimals = (currency === 'NGN') ? 0 : (amount < 10 ? 2 : 0);
+  return symbol + Number(amount).toLocaleString(undefined, { maximumFractionDigits: decimals });
+}
+
+function fxStatusText(){
+  if(getCurrentCurrency() === 'NGN') return '';
+  if(!fxUpdatedAt) return '💱 Fetching live exchange rate…';
+  const mins = Math.round((Date.now() - fxUpdatedAt.getTime()) / 60000);
+  const when = mins < 1 ? 'just now' : mins === 1 ? '1 min ago' : mins + ' min ago';
+  return `💱 Live rate updated ${when}`;
+}
+
+/* ===================== END CURRENCY / LIVE EXCHANGE RATE ================= */
+
 /* Render products from local PRODUCTS array */
 function renderProducts(items){
   productGrid.innerHTML = '';
@@ -346,14 +465,22 @@ function renderProducts(items){
   items.forEach(p=>{
     const el = document.createElement('div');
     el.className = 'card';
+    const converted = formatConvertedPrice(p.price);
+    const fxNote = fxStatusText();
+    const originalNote = (getCurrentCurrency() !== 'NGN')
+      ? `<div style="font-size:11px;color:#7c9b8c;margin-top:2px">₦${Number(p.price).toLocaleString()} · ${fxNote}</div>`
+      : '';
     el.innerHTML = `
       <img src="${escapeHtml(p.imageURL)}" alt="${escapeHtml(p.name)}">
       <h3>${escapeHtml(p.name)}</h3>
       <div class="priceRow">
-        <div style="font-weight:800">₦${Number(p.price).toLocaleString()}</div>
+        <div>
+          <div style="font-weight:800">${converted}</div>
+          ${originalNote}
+        </div>
         <div style="display:flex;gap:8px">
           <button class="btn product-add" data-name="${escapeHtml(p.name)}" data-price="${p.price}">Add to Cart</button>
-          <button class="btn product-buy" data-name="${escapeHtml(p.name)}" data-price="${p.price}">Buy Now</button>
+          <button class="btn product-buy" data-name="${escapeHtml(p.name)}" data-price="${p.price}">Get Now</button>
         </div>
       </div>`;
     productGrid.appendChild(el);
@@ -524,6 +651,9 @@ function loadSavedCountry() {
   // Update UI
   document.getElementById('selectedFlag').textContent = country.flag;
   document.getElementById('selectedCountry').textContent = country.name;
+
+  // Fetch live exchange rates, then re-render prices in the local currency
+  fetchFxRates().then(() => renderProducts(PRODUCTS));
   }
   
 function openCountryPicker(){
@@ -532,7 +662,14 @@ function openCountryPicker(){
   COUNTRIES.forEach(c=>{
     const row=document.createElement('div'); row.style.padding='8px'; row.style.cursor='pointer'; row.style.display='flex'; row.style.gap='8px'; row.style.alignItems='center';
     row.innerHTML = `<div style="font-size:20px">${c.flag}</div><div style="flex:1">${c.name}</div>`;
-    row.addEventListener('click', ()=> { localStorage.setItem('NH_COUNTRY_v1', JSON.stringify(c)); document.getElementById('selectedFlag').textContent=c.flag; document.getElementById('selectedCountry').textContent=c.name; closeAllModals(); });
+    row.addEventListener('click', ()=> {
+      localStorage.setItem('NH_COUNTRY_v1', JSON.stringify(c));
+      document.getElementById('selectedFlag').textContent=c.flag;
+      document.getElementById('selectedCountry').textContent=c.name;
+      closeAllModals();
+      showToast(`Prices updated for ${c.name} (${CURRENCY_MAP[c.code] || 'USD'}) 💱`, 'success');
+      fetchFxRates().then(() => renderProducts(PRODUCTS));
+    });
     list.appendChild(row);
   });
 }
@@ -546,7 +683,7 @@ function renderCartItems(){
   cart.forEach((item, idx) => {
     const row = document.createElement('div');
     row.style.display='flex'; row.style.alignItems='center'; row.style.gap='8px'; row.style.padding='8px 0'; row.style.borderBottom='1px solid rgba(0,0,0,0.04)';
-    row.innerHTML = `<div style="flex:1"><div style="font-weight:800">${item.name}</div><div style="color:#666">₦${Number(item.price).toLocaleString()}</div></div><button data-idx="${idx}" class="btn removeItem" style="background:#ef4444;color:#fff">Remove</button>`;
+    row.innerHTML = `<div style="flex:1"><div style="font-weight:800">${item.name}</div><div style="color:#666">${formatConvertedPrice(item.price)}${getCurrentCurrency()!=='NGN' ? ' <span style="color:#9bb8ac">(₦'+Number(item.price).toLocaleString()+')</span>' : ''}</div></div><button data-idx="${idx}" class="btn removeItem" style="background:#ef4444;color:#fff">Remove</button>`;
     container.appendChild(row);
   });
 }
@@ -607,7 +744,16 @@ function openPaymentModal(){
   document.getElementById('paymentStepSelect').style.display = 'block';
   document.getElementById('paymentStepConfirm').style.display = 'none';
   document.getElementById('payProductName').textContent = selectedProduct;
-  document.getElementById('payProductPrice').textContent = '₦' + Number(selectedPrice).toLocaleString();
+
+  const currency = getCurrentCurrency();
+  if(currency === 'NGN'){
+    document.getElementById('payProductPrice').innerHTML = '₦' + Number(selectedPrice).toLocaleString();
+  } else {
+    document.getElementById('payProductPrice').innerHTML =
+      formatConvertedPrice(selectedPrice) +
+      `<div style="font-size:12px;font-weight:600;color:#4a7c65;margin-top:4px">≈ ₦${Number(selectedPrice).toLocaleString()} · charged in Nigerian Naira (NGN) at checkout · ${fxStatusText()}</div>`;
+  }
+
   document.getElementById('proceedCheckout').style.display = 'none';
   renderPaymentMethods();
   paymentModalEl.style.display = 'flex';
