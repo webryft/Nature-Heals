@@ -66,10 +66,24 @@
   .paymentMethodBtn.selected{border-color:#16a34a;background:#ecfdf5;box-shadow:0 0 0 2px rgba(22,163,74,0.15)}
   .payLogo{width:30px;height:30px;border-radius:8px;object-fit:contain;flex-shrink:0;background:#f3fff6}
   .payLogoFallback{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff}
-  #proceedCheckout{width:100%;margin-top:16px;display:none}
   #paymentStepConfirm{text-align:center;padding:6px 0}
   #paymentStepConfirm .checkIcon{font-size:42px}
   #confirmPayment{width:100%;margin-top:12px}
+
+  /* Footer */
+  .siteFooter{margin-top:40px;background:linear-gradient(160deg,#0f3a24,#145c34);color:#eafff0;padding:clamp(28px,6vw,44px) 18px 20px}
+  .siteFooter .footWrap{max-width:1300px;margin:0 auto}
+  .siteFooter h4{margin:0 0 12px;font-size:15px;color:#fff;font-weight:800}
+  .siteFooter .footGrid{display:grid;gap:28px;grid-template-columns:1fr 1fr}
+  @media(max-width:600px){.siteFooter .footGrid{grid-template-columns:1fr}}
+  .siteFooter ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+  .siteFooter ul button,.siteFooter ul span{background:none;border:0;color:#cdebd8;font-size:14px;text-align:left;cursor:pointer;padding:0;font-family:inherit;transition:color .2s}
+  .siteFooter ul button:hover{color:#fff}
+  .siteFooter ul span{cursor:default}
+  .siteFooter .footNote{font-size:12.5px;color:#bfe4cc;font-style:italic;max-width:64ch;margin:22px 0 0;line-height:1.55}
+  .siteFooter hr{border:0;border-top:1px solid rgba(255,255,255,.16);margin:26px 0 14px}
+  .siteFooter .bottomBar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:#bfe4cc}
+  .siteFooter .bottomBar .copy{margin-left:auto;text-align:right}
 </style>
 </head>
 <body>
@@ -103,11 +117,44 @@
 
 <div style="max-width:1300px;margin:0 auto;padding:0 18px">
   <div style="background:#ecfdf5;border:1px solid #bbf0d3;border-radius:12px;padding:12px 16px;font-size:13px;color:#234e3a;line-height:1.5">
-    <strong>Please note:</strong> These guides are educational and focus on prevention and healthy lifestyle habits. They are not medical treatment and don't replace a doctor's diagnosis or care.
+    <strong>Please note:</strong> These guides are educational and focus on prevention, healing and lifestyle habits.
   </div>
 </div>
 
 <div id="productGrid" class="grid"></div>
+
+<footer class="siteFooter">
+  <div class="footWrap">
+    <div class="footGrid">
+      <div>
+        <h4>Menu</h4>
+        <ul>
+          <li><button id="footSignUp" type="button">Sign up</button></li>
+          <li><button id="footSignIn" type="button">Sign in</button></li>
+          <li><button id="footAbout" type="button">About</button></li>
+          <li><button id="footSettings" type="button">Settings</button></li>
+          <li><button id="footContact" type="button">Contact us</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Nature Heals</h4>
+        <ul>
+          <li><span>Calming nature prints &amp; beginner guides</span></li>
+          <li><span>Cure Yourself at home, go for check-up after 3 weeks.</span></li>
+          <li><span>Use only this platform, WhatsApp for any question.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footNote">These guides are educational and focus on prevention and healthy lifestyle habits. They are not medical treatment and don't replace a doctor's diagnosis or care.</p>
+
+    <hr>
+    <div class="bottomBar">
+      <span>Nature Heals — calming prints for a calmer home.</span>
+      <span class="copy">© 2026 Nature Heals. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
 
 <audio id="bgAudio" autoplay loop>
   <source src="audio.mp3" type="audio/mpeg">
@@ -238,31 +285,14 @@
   </div>
 </div>
 
-<!-- PAYMENT MODAL -->
+<!-- PAYMENT MODAL — only shown after Paystack confirms a successful charge -->
 <div id="paymentModal" class="overlay">
   <div class="modal" style="max-width:420px">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong id="paymentModalTitle">Select Payment Method</strong>
+      <strong id="paymentModalTitle">Payment Complete</strong>
       <button id="closePayment" class="btn">✕</button>
     </div>
 
-    <!-- STEP 1: choose a payment method, then checkout -->
-    <div id="paymentStepSelect">
-      <div class="payProduct" id="payProductName"></div>
-      <div class="payPrice" id="payProductPrice"></div>
-
-      <div id="paymentMethodsGrid" class="paymentMethodsGrid"></div>
-
-      <button id="proceedCheckout" class="btn payBtn">Checkout</button>
-
-      <div id="countdown" style="margin-top:14px;font-weight:bold;color:#dc2626;text-align:center"></div>
-
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button id="cancelPayment" class="btn" style="flex:1">Cancel</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: shown after Paystack confirms a successful charge -->
     <div id="paymentStepConfirm" style="display:none">
       <div class="checkIcon">✅</div>
       <p style="font-weight:800;font-size:16px;color:#16a34a;margin:8px 0">Payment Successful!</p>
@@ -284,19 +314,19 @@
    - Add more items by copying a line and incrementing image filename (product11.jpg, etc.)
 =============================================================== */
 const PRODUCTS = [
-  { id: 'p1', name: 'Kidney Health: A Prevention Guide', price: 2000, imageURL: 'product1.jpg' },
-  { id: 'p2', name: 'Preventing Stomach Ulcers: Diet & Lifestyle', price: 2000, imageURL: 'product2.jpg' },
-  { id: 'p3', name: 'Fertility & Reproductive Health: A Lifestyle Guide', price: 3000, imageURL: 'product3.jpg' },
-  { id: 'p4', name: 'HIV Prevention & Healthy Living Guide', price: 10000, imageURL: 'product4.jpg' },
-  { id: 'p5', name: 'Liver Health: Hepatitis Prevention Guide', price: 5000, imageURL: 'product5.jpg' },
+  { id: 'p1', name: 'Kidney pain: A Healing Guide', price: 2000, imageURL: 'product1.jpg' },
+  { id: 'p2', name: 'Stomach Ulcers: Diet & Lifestyle', price: 2000, imageURL: 'product2.jpg' },
+  { id: 'p3', name: 'Fertility & Reproductive Health', price: 3000, imageURL: 'product3.jpg' },
+  { id: 'p4', name: 'HIV Prevention & Cure Living Guide', price: 10000, imageURL: 'product4.jpg' },
+  { id: 'p5', name: 'Liver Health: Hepatitis B', price: 5000, imageURL: 'product5.jpg' },
   { id: 'p6', name: 'Heart Health: Prevention-Focused Habits', price: 4000, imageURL: 'product6.jpg' },
-  { id: 'p7', name: "Men's Reproductive Health: A Lifestyle Guide", price: 3000, imageURL: 'product7.jpg' },
+  { id: 'p7', name: "Men's ED ", price: 3000, imageURL: 'product7.jpg' },
   { id: 'p8', name: 'Preventing Type 2 Diabetes: A Lifestyle Guide', price: 2000, imageURL: 'product8.jpg' },
   { id: 'p9', name: 'Lung & Respiratory Health: A Prevention Guide', price: 2000, imageURL: 'product9.jpg' },
   { id: 'p10', name: 'Stroke Prevention: Lifestyle Guide', price: 2000, imageURL: 'product10.jpg' },
-  { id: 'p11', name: 'Healthy Aging: Habits for a Longer Life', price: 4500, imageURL: 'product11.jpg' },
+  { id: 'p11', name: 'Slow Aging: Habits for a Longer Life', price: 4500, imageURL: 'product11.jpg' },
   { id: 'p0', name: 'Eye Health: A Prevention Guide', price: 4000, imageURL: 'product0.jpg' },
-  { id: 'p', name: 'Preventing High Blood Pressure: A Lifestyle Guide', price: 4000, imageURL: 'product.jpg' },
+  { id: 'p', name: 'High Blood Pressure: balance HBP', price: 4000, imageURL: 'product.jpg' },
   { id: 'p12', name: 'Immune Health: Preventing Common Infections', price: 7000, imageURL: 'product12.jpg' },
   { id: 'p13', name: 'Sexual Health: Prevention & Awareness Guide', price: 6000, imageURL: 'product13.jpg' },
   { id: 'p14', name: "Women's Health: Understanding & Reducing Fibroid Risk", price: 5000, imageURL: 'product14.jpg' },
@@ -305,8 +335,8 @@ const PRODUCTS = [
   { id: 'p17', name: 'Cancer Risk Reduction: Diet & Lifestyle Habits', price: 10000, imageURL: 'product17.jpg' },
   { id: 'p18', name: 'HPV Awareness & Prevention Guide', price: 7300, imageURL: 'product18.jpg' },
   { id: 'p19', name: 'Sexual Health: Herpes Prevention & Awareness', price: 7400, imageURL: 'product19.jpg' },
-  { id: 'p20', name: 'Blood Health: A Nutrition & Wellness Guide', price: 10000, imageURL: 'product20.jpg' },
-  { id: 'p21', name: 'Understanding HIV & Immune Health: An Awareness Guide', price: 20000, imageURL: 'product21.jpg' },
+  { id: 'p20', name: 'Blood Health: protect CD4 cells', price: 10000, imageURL: 'product20.jpg' },
+  { id: 'p21', name: 'HIV & AIDS Health: hidden secret about HIV', price: 20000, imageURL: 'product21.jpg' },
 ];
 /* ============================================================= */
 
@@ -329,7 +359,6 @@ let currentUser = JSON.parse(localStorage.getItem(LS_USER) || 'null');
 let cart = JSON.parse(localStorage.getItem(LS_CART) || '[]');
 let selectedProduct = null;
 let selectedPrice = 0;
-let selectedMethod = null;
 
 function saveUser(){ localStorage.setItem(LS_USER, JSON.stringify(currentUser)); }
 function saveCart(){ localStorage.setItem(LS_CART, JSON.stringify(cart)); updateCartUI(); }
@@ -698,7 +727,7 @@ document.addEventListener('click', (e)=>{
   if(e.target.classList.contains('product-buy')){
     selectedProduct = e.target.dataset.name;
     selectedPrice = Number(e.target.dataset.price || 0);
-    openPaymentModal();
+    launchPaystack();
   }
 
   if(e.target.classList.contains('removeItem')){
@@ -722,66 +751,12 @@ document.querySelectorAll('.overlay').forEach(ov => ov.addEventListener('click',
 const PAYSTACK_PUBLIC_KEY = 'pk_live_4ff37d15381d1d12c78fd66f7bc86beb64c59415';
 const WHATSAPP_NUMBER = '17404061406';
 
-/* Each method maps to the Paystack channel(s) it should restrict the
-   checkout to. Opay / MoniePoint / Africa Transfer / 9PSB don't have their
-   own Paystack channel code — Paystack issues one dynamic account number
-   under "bank_transfer" that accepts a transfer from ANY bank or wallet
-   app, including these, so they all route there. Card uses the card channel. */
-const PAYMENT_METHODS = [
-  { id:'opay', name:'Opay', logo:'opay.png', color:'#1ba8e0', channels:['bank_transfer'] },
-  { id:'moniepoint', name:'MoniePoint', logo:'moniepoint.png', color:'#1455dc', channels:['bank_transfer'] },
-  { id:'africa_transfer', name:'Africa Transfer', logo:'africatransfer.png', color:'#16a34a', channels:['bank_transfer'] },
-  { id:'9psb', name:'9 Payment Service', logo:'9psb.png', color:'#7c3aed', channels:['bank_transfer'] },
-  { id:'card', name:'Card Payment', logo:'card.png', color:'#ea580c', channels:['card'] } ,
-    { id:'Kuda', name:'kuda MFB', logo:'kuda.png', color:'#ea580c', channels:['bank_transfer'] } 
-];
-
 const paymentModalEl = document.getElementById('paymentModal');
 
-function openPaymentModal(){
-  selectedMethod = null;
-  document.getElementById('paymentModalTitle').textContent = 'Select Payment Method';
-  document.getElementById('paymentStepSelect').style.display = 'block';
-  document.getElementById('paymentStepConfirm').style.display = 'none';
-  document.getElementById('payProductName').textContent = selectedProduct;
-
-  const currency = getCurrentCurrency();
-  if(currency === 'NGN'){
-    document.getElementById('payProductPrice').innerHTML = '₦' + Number(selectedPrice).toLocaleString();
-  } else {
-    document.getElementById('payProductPrice').innerHTML =
-      formatConvertedPrice(selectedPrice) +
-      `<div style="font-size:12px;font-weight:600;color:#4a7c65;margin-top:4px">≈ ₦${Number(selectedPrice).toLocaleString()} · charged in Nigerian Naira (NGN) at checkout · ${fxStatusText()}</div>`;
-  }
-
-  document.getElementById('proceedCheckout').style.display = 'none';
-  renderPaymentMethods();
-  paymentModalEl.style.display = 'flex';
-  startCountdown();
-}
-
-function renderPaymentMethods(){
-  const grid = document.getElementById('paymentMethodsGrid');
-  grid.innerHTML = '';
-  PAYMENT_METHODS.forEach(m=>{
-    const initials = m.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'paymentMethodBtn';
-    btn.dataset.id = m.id;
-    btn.innerHTML = `<img class="payLogo" src="${m.logo}" alt="${escapeHtml(m.name)}" onerror="this.outerHTML='<div class=&quot;payLogoFallback&quot; style=&quot;background:${m.color}&quot;>${initials}</div>'"><span>${escapeHtml(m.name)}</span>`;
-    btn.addEventListener('click', ()=>{
-      selectedMethod = m;
-      document.querySelectorAll('.paymentMethodBtn').forEach(b=>b.classList.remove('selected'));
-      btn.classList.add('selected');
-      document.getElementById('proceedCheckout').style.display = 'block';
-    });
-    grid.appendChild(btn);
-  });
-}
-
-document.getElementById('proceedCheckout').addEventListener('click', ()=>{
-  if(!selectedMethod){ showPopup('Choose a method','Please select a payment method first.','warning'); return; }
+/* "Get Now" calls this directly — no confirm card, no countdown, no
+   in-between step. Paystack opens immediately and shows every payment
+   method enabled on the account (card, bank transfer, USSD, etc.). */
+function launchPaystack(){
   if(typeof PaystackPop === 'undefined'){
     showPopup('Payment unavailable','The payment service failed to load. Check your internet connection and try again.','error');
     return;
@@ -792,33 +767,30 @@ document.getElementById('proceedCheckout').addEventListener('click', ()=>{
     email: email,
     amount: Math.round(Number(selectedPrice) * 100), // kobo
     currency: 'NGN',
-    channels: selectedMethod.channels,
     ref: 'NH_' + Date.now(),
-    metadata: { product: selectedProduct, method: selectedMethod.name },
+    metadata: { product: selectedProduct },
     callback: function(response){
       showPaymentSuccess(response.reference);
     },
     onClose: function(){
-      // user closed the Paystack popup without paying — stay on step 1
+      // user closed the Paystack popup without paying — nothing else to reset
     }
   });
   handler.openIframe();
-});
+}
 
 function showPaymentSuccess(reference){
-  stopCountdown();
   document.getElementById('paymentModalTitle').textContent = 'Payment Complete';
-  document.getElementById('paymentStepSelect').style.display = 'none';
   document.getElementById('paymentStepConfirm').style.display = 'block';
   paymentModalEl.dataset.lastRef = reference || '';
+  paymentModalEl.style.display = 'flex';
 }
 
 document.getElementById('confirmPayment').addEventListener('click', ()=>{
   const email = (currentUser && currentUser.email) ? currentUser.email : 'guest@example.com';
   const reference = paymentModalEl.dataset.lastRef || '';
-  const methodName = selectedMethod ? selectedMethod.name : 'Paystack';
   const msg = encodeURIComponent(
-    `Hello Nature Heals, I have made payment for "${selectedProduct}" (₦${Number(selectedPrice).toLocaleString()}) via ${methodName}.\n\nPaystack reference: ${reference}\nMy email: ${email}`
+    `Hello Nature Heals, I have made payment for "${selectedProduct}" (₦${Number(selectedPrice).toLocaleString()}) via Paystack.\n\nPaystack reference: ${reference}\nMy email: ${email}`
   );
   paymentModalEl.style.display = 'none';
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
@@ -826,37 +798,7 @@ document.getElementById('confirmPayment').addEventListener('click', ()=>{
 
 document.getElementById('closePayment').onclick = () => {
   paymentModalEl.style.display = 'none';
-  stopCountdown();
 };
-
-document.getElementById('cancelPayment').onclick = () => {
-  paymentModalEl.style.display = 'none';
-  stopCountdown();
-};
-
-let countdownInterval;
-
-function startCountdown() {
-  let time = 600; // 10 minutes = 600 seconds
-  const countdownEl = document.getElementById('countdown');
-  clearInterval(countdownInterval);
-  countdownEl.textContent = 'Time left: 10:00';
-  countdownInterval = setInterval(() => {
-    let minutes = Math.floor(time / 60);
-    let seconds = time % 60;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    countdownEl.textContent = `Time left: ${minutes}:${seconds}`;
-    time--;
-    if (time < 0) {
-      clearInterval(countdownInterval);
-      countdownEl.textContent = "Time expired!";
-    }
-  }, 1000);
-}
-
-function stopCountdown() {
-  clearInterval(countdownInterval);
-}
 // ====================== END PAYMENT ======================
 
 /* Mobile audio autoplay helper */
@@ -865,6 +807,14 @@ document.body.addEventListener('click', ()=> { if(bgAudio.paused) bgAudio.play()
 
 /* expose helpers */
 window.showToast = showToast; window.showPopup = showPopup;
+
+/* Footer "Menu" buttons just trigger the same handlers as the ☰ drawer,
+   so both stay in sync with a single source of truth. */
+[['footSignUp','openSignUp'],['footSignIn','openSignIn'],['footAbout','openAbout'],
+ ['footSettings','openSettings'],['footContact','openContact']].forEach(([footId,srcId])=>{
+  const el = document.getElementById(footId);
+  if(el) el.addEventListener('click', ()=> document.getElementById(srcId).click());
+});
 
 document.addEventListener('DOMContentLoaded', loadSavedCountry);
   
